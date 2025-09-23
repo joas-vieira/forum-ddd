@@ -1,3 +1,4 @@
+import { UniqueId } from "../../core/entities/value-objects/unique-id.value-object.js";
 import { Answer } from "../entities/answer.entity.js";
 import type { AnswerRepository } from "../repositories/answer.repository.js";
 
@@ -15,9 +16,9 @@ export class AnswerQuestionUseCase {
     questionId,
     content,
   }: AnswerQuestionUseCaseRequest) {
-    const answer = new Answer({
-      authorId: instructorId,
-      questionId,
+    const answer = Answer.create({
+      authorId: new UniqueId(instructorId),
+      questionId: new UniqueId(questionId),
       content,
     });
 
