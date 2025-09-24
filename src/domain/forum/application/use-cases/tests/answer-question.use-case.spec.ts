@@ -1,5 +1,5 @@
-import { AnswerQuestionUseCase } from "../answer-question.use-case.js";
 import type { AnswerRepository } from "../../repositories/answer.repository.js";
+import { AnswerQuestionUseCase } from "../answer-question.use-case.js";
 
 const fakeAnswerRepository: AnswerRepository = {
   create: async (answer) => {},

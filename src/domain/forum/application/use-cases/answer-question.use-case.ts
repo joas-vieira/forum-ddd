@@ -1,5 +1,5 @@
 import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
-import { Answer } from "../entities/answer.entity.js";
+import { Answer } from "../../enterprise/entities/answer.entity.js";
 import type { AnswerRepository } from "../repositories/answer.repository.js";
 
 interface AnswerQuestionUseCaseRequest {
