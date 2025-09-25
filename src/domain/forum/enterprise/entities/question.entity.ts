@@ -9,7 +9,7 @@ interface QuestionProps {
   bestAnswerId?: UniqueId | undefined;
   title: string;
   content: string;
-  slug: Slug;
+  slug?: Slug;
   createdAt: Date;
   updatedAt?: Date;
 }
