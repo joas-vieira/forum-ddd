@@ -1,11 +1,15 @@
 export class Slug {
   value: string;
 
-  constructor(value: string) {
+  private constructor(value: string) {
     this.value = value;
   }
 
-  static create(value: string): Slug {
+  static create(value: string) {
+    return new Slug(value);
+  }
+
+  static createFromText(value: string) {
     const slug = value
       .normalize("NFKD")
       .toLowerCase()

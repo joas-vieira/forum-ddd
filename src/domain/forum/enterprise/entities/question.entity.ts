@@ -4,12 +4,12 @@ import type { UniqueId } from "@/core/entities/value-objects/unique-id.value-obj
 import type { Optional } from "@/core/types/optional.js";
 import { Slug } from "./value-objects/slug.value-object.js";
 
-interface QuestionProps {
+export interface QuestionProps {
   authorId: UniqueId;
   bestAnswerId?: UniqueId | undefined;
   title: string;
   content: string;
-  slug?: Slug;
+  slug: Slug;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -62,7 +62,7 @@ export class Question extends Entity<QuestionProps> {
 
   set title(title: string) {
     this.props.title = title;
-    this.props.slug = Slug.create(title);
+    this.props.slug = Slug.createFromText(title);
     this.touch();
   }
 
@@ -71,11 +71,14 @@ export class Question extends Entity<QuestionProps> {
     this.touch();
   }
 
-  static create(props: Optional<QuestionProps, "createdAt">, id?: UniqueId) {
+  static create(
+    props: Optional<QuestionProps, "createdAt" | "slug">,
+    id?: UniqueId
+  ) {
     const question = new Question(
       {
         ...props,
-        slug: props.slug ?? Slug.create(props.title),
+        slug: props.slug ?? Slug.createFromText(props.title),
         createdAt: new Date(),
       },
       id
