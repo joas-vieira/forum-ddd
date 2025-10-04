@@ -1,0 +1,56 @@
+import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
+import { makeAnswerFactory } from "../../../../../../test/factories/make-answer.factory.js";
+import { InMemoryAnswerRepository } from "../../../../../../test/repositories/in-memory-answer.repository.js";
+import { FetchQuestionAnswersUseCase } from "../fetch-question-answers.use-case.js";
+
+let inMemoryAnswerRepository: InMemoryAnswerRepository;
+let sut: FetchQuestionAnswersUseCase;
+
+describe("FetchQuestionAnswersUseCase", () => {
+  beforeEach(() => {
+    inMemoryAnswerRepository = new InMemoryAnswerRepository();
+    sut = new FetchQuestionAnswersUseCase(inMemoryAnswerRepository);
+  });
+
+  it("should be able fetch answers for a question", async () => {
+    await inMemoryAnswerRepository.create(
+      makeAnswerFactory({
+        questionId: new UniqueId("question-1"),
+      })
+    );
+    await inMemoryAnswerRepository.create(
+      makeAnswerFactory({
+        questionId: new UniqueId("question-1"),
+      })
+    );
+    await inMemoryAnswerRepository.create(
+      makeAnswerFactory({
+        questionId: new UniqueId("question-1"),
+      })
+    );
+
+    const { answers } = await sut.execute({
+      questionId: "question-1",
+      page: 1,
+    });
+
+    expect(answers).toHaveLength(3);
+  });
+
+  it("should be able fetch paginated answers for a question", async () => {
+    for (let i = 1; i <= 22; i++) {
+      await inMemoryAnswerRepository.create(
+        makeAnswerFactory({
+          questionId: new UniqueId("question-1"),
+        })
+      );
+    }
+
+    const { answers } = await sut.execute({
+      questionId: "question-1",
+      page: 2,
+    });
+
+    expect(answers).toHaveLength(2);
+  });
+});
