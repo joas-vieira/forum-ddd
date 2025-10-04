@@ -1,0 +1,60 @@
+import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
+import { makeAnswerFactory } from "../../../../../../test/factories/make-answer.factory.js";
+import { makeQuestionFactory } from "../../../../../../test/factories/make-question.factory.js";
+import { InMemoryAnswerRepository } from "../../../../../../test/repositories/in-memory-answer.repository.js";
+import { InMemoryQuestionRepository } from "../../../../../../test/repositories/in-memory-question.repository.js";
+import { ChooseQuestionBestAnswerUseCase } from "../choose-question-best-answer.use-case.js";
+
+let inMemoryQuestionRepository: InMemoryQuestionRepository;
+let inMemoryAnswerRepository: InMemoryAnswerRepository;
+let sut: ChooseQuestionBestAnswerUseCase;
+
+describe("ChooseQuestionBestAnswerUseCase", () => {
+  beforeEach(() => {
+    inMemoryQuestionRepository = new InMemoryQuestionRepository();
+    inMemoryAnswerRepository = new InMemoryAnswerRepository();
+
+    sut = new ChooseQuestionBestAnswerUseCase(
+      inMemoryAnswerRepository,
+      inMemoryQuestionRepository
+    );
+  });
+
+  it("should be able to choose a question's best answer", async () => {
+    const newQuestion = makeQuestionFactory();
+    const newAnswer = makeAnswerFactory({
+      questionId: newQuestion.id,
+    });
+
+    await inMemoryQuestionRepository.create(newQuestion);
+    await inMemoryAnswerRepository.create(newAnswer);
+
+    await sut.execute({
+      authorId: newQuestion.authorId.toString(),
+      answerId: newAnswer.id.toString(),
+    });
+
+    expect(inMemoryQuestionRepository.items[0]?.bestAnswerId).toEqual(
+      newAnswer.id
+    );
+  });
+
+  it("should not be able to choose a best answer from another author", async () => {
+    const newQuestion = makeQuestionFactory({
+      authorId: new UniqueId("author-1"),
+    });
+    const newAnswer = makeAnswerFactory({
+      questionId: newQuestion.id,
+    });
+
+    await inMemoryQuestionRepository.create(newQuestion);
+    await inMemoryAnswerRepository.create(newAnswer);
+
+    await expect(() =>
+      sut.execute({
+        authorId: "author-2",
+        answerId: newAnswer.id.toString(),
+      })
+    ).rejects.toBeInstanceOf(Error);
+  });
+});
