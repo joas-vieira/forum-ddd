@@ -13,37 +13,29 @@ describe("DeleteAnswerUseCase", () => {
   });
 
   it("should be able to delete a answer", async () => {
-    const newAnswer = makeAnswerFactory(
-      {
-        authorId: new UniqueId("author-1"),
-      },
-      new UniqueId("answer-1")
-    );
+    const newAnswer = makeAnswerFactory();
 
     await inMemoryAnswerRepository.create(newAnswer);
 
     await sut.execute({
-      authorId: "author-1",
-      answerId: "answer-1",
+      authorId: newAnswer.authorId.toString(),
+      answerId: newAnswer.id.toString(),
     });
 
     expect(inMemoryAnswerRepository.items).toHaveLength(0);
   });
 
   it("should not be able to delete a answer from another author", async () => {
-    const newAnswer = makeAnswerFactory(
-      {
-        authorId: new UniqueId("author-1"),
-      },
-      new UniqueId("answer-1")
-    );
+    const newAnswer = makeAnswerFactory({
+      authorId: new UniqueId("author-1"),
+    });
 
     await inMemoryAnswerRepository.create(newAnswer);
 
     await expect(() =>
       sut.execute({
         authorId: "author-2",
-        answerId: "answer-1",
+        answerId: newAnswer.id.toString(),
       })
     ).rejects.toBeInstanceOf(Error);
   });
