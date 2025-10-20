@@ -29,12 +29,12 @@ describe("FetchQuestionAnswersUseCase", () => {
       })
     );
 
-    const { answers } = await sut.execute({
+    const response = await sut.execute({
       questionId: "question-1",
       page: 1,
     });
 
-    expect(answers).toHaveLength(3);
+    expect(response.value?.answers).toHaveLength(3);
   });
 
   it("should be able fetch paginated answers for a question", async () => {
@@ -46,11 +46,11 @@ describe("FetchQuestionAnswersUseCase", () => {
       );
     }
 
-    const { answers } = await sut.execute({
+    const response = await sut.execute({
       questionId: "question-1",
       page: 2,
     });
 
-    expect(answers).toHaveLength(2);
+    expect(response.value?.answers).toHaveLength(2);
   });
 });

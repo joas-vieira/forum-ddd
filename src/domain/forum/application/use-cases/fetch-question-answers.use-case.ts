@@ -1,3 +1,4 @@
+import { right, type Either } from "@/core/either.js";
 import type { Answer } from "../../enterprise/entities/answer.entity.js";
 import type { AnswerRepository } from "../repositories/answer.repository.js";
 
@@ -6,9 +7,12 @@ interface FetchQuestionAnswersUseCaseRequest {
   page: number;
 }
 
-interface FetchQuestionAnswersUseCaseResponse {
-  answers: Answer[];
-}
+type FetchQuestionAnswersUseCaseResponse = Either<
+  null,
+  {
+    answers: Answer[];
+  }
+>;
 
 export class FetchQuestionAnswersUseCase {
   constructor(private readonly answerRepository: AnswerRepository) {}
@@ -22,6 +26,6 @@ export class FetchQuestionAnswersUseCase {
       { page }
     );
 
-    return { answers };
+    return right({ answers });
   }
 }

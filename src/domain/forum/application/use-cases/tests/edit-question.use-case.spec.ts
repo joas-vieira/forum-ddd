@@ -2,6 +2,7 @@ import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.j
 import { makeQuestionFactory } from "../../../../../../test/factories/make-question.factory.js";
 import { InMemoryQuestionRepository } from "../../../../../../test/repositories/in-memory-question.repository.js";
 import { EditQuestionUseCase } from "../edit-question.use-case.js";
+import { NotAllowedError } from "../errors/not-allowed.error.js";
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository;
 let sut: EditQuestionUseCase;
@@ -45,13 +46,14 @@ describe("EditQuestionUseCase", () => {
 
     await inMemoryQuestionRepository.create(newQuestion);
 
-    await expect(() =>
-      sut.execute({
-        authorId: "author-2",
-        questionId: "question-1",
-        title: "Edited Question",
-        content: "Edited Content",
-      })
-    ).rejects.toBeInstanceOf(Error);
+    const response = await sut.execute({
+      authorId: "author-2",
+      questionId: "question-1",
+      title: "Edited Question",
+      content: "Edited Content",
+    });
+
+    expect(response.isLeft()).toBeTruthy();
+    expect(response.value).toBeInstanceOf(NotAllowedError);
   });
 });

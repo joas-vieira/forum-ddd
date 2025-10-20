@@ -1,9 +1,17 @@
+import { left, right, type Either } from "@/core/either.js";
 import type { AnswerCommentRepository } from "../repositories/answer-comment.repository.js";
+import { NotAllowedError } from "./errors/not-allowed.error.js";
+import { ResourceNotFoundError } from "./errors/resource-not-found.error.js";
 
 interface DeleteAnswerCommentUseCaseRequest {
   authorId: string;
   answerCommentId: string;
 }
+
+type DeleteAnswerCommentUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  object
+>;
 
 export class DeleteAnswerCommentUseCase {
   constructor(
@@ -13,19 +21,21 @@ export class DeleteAnswerCommentUseCase {
   async execute({
     authorId,
     answerCommentId,
-  }: DeleteAnswerCommentUseCaseRequest): Promise<void> {
+  }: DeleteAnswerCommentUseCaseRequest): Promise<DeleteAnswerCommentUseCaseResponse> {
     const answerComment = await this.answerCommentRepository.findById(
       answerCommentId
     );
 
     if (!answerComment) {
-      throw new Error("Answer comment not found");
+      return left(new ResourceNotFoundError());
     }
 
     if (authorId && answerComment.authorId.toString() !== authorId) {
-      throw new Error("You are not the author of this answer comment");
+      return left(new NotAllowedError());
     }
 
     await this.answerCommentRepository.delete(answerComment);
+
+    return right({});
   }
 }

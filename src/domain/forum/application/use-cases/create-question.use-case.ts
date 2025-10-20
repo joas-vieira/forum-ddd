@@ -1,3 +1,4 @@
+import { right, type Either } from "@/core/either.js";
 import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
 import { Question } from "../../enterprise/entities/question.entity.js";
 import type { QuestionRepository } from "../repositories/question.repository.js";
@@ -8,9 +9,12 @@ interface CreateQuestionUseCaseRequest {
   content: string;
 }
 
-interface CreateQuestionUseCaseResponse {
-  question: Question;
-}
+type CreateQuestionUseCaseResponse = Either<
+  null,
+  {
+    question: Question;
+  }
+>;
 
 export class CreateQuestionUseCase {
   constructor(private readonly questionRepository: QuestionRepository) {}
@@ -28,6 +32,6 @@ export class CreateQuestionUseCase {
 
     await this.questionRepository.create(question);
 
-    return { question };
+    return right({ question });
   }
 }

@@ -1,9 +1,17 @@
+import { left, right, type Either } from "@/core/either.js";
 import type { AnswerRepository } from "../repositories/answer.repository.js";
+import { NotAllowedError } from "./errors/not-allowed.error.js";
+import { ResourceNotFoundError } from "./errors/resource-not-found.error.js";
 
 interface DeleteAnswerUseCaseRequest {
   authorId: string;
   answerId: string;
 }
+
+type DeleteAnswerUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  object
+>;
 
 export class DeleteAnswerUseCase {
   constructor(private readonly answerRepository: AnswerRepository) {}
@@ -11,17 +19,19 @@ export class DeleteAnswerUseCase {
   async execute({
     authorId,
     answerId,
-  }: DeleteAnswerUseCaseRequest): Promise<void> {
+  }: DeleteAnswerUseCaseRequest): Promise<DeleteAnswerUseCaseResponse> {
     const answer = await this.answerRepository.findById(answerId);
 
     if (!answer) {
-      throw new Error("Answer not found");
+      return left(new ResourceNotFoundError());
     }
 
     if (authorId && answer.authorId.toString() !== authorId) {
-      throw new Error("You are not the author of this answer");
+      return left(new NotAllowedError());
     }
 
     await this.answerRepository.delete(answer);
+
+    return right({});
   }
 }
