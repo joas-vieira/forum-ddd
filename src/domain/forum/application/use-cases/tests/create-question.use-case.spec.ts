@@ -23,10 +23,14 @@ describe("CreateQuestionUseCase", () => {
     expect(inMemoryQuestionRepository.items[0]).toEqual(
       response.value?.question
     );
-    expect(inMemoryQuestionRepository.items[0]?.attachments).toHaveLength(2);
-    expect(inMemoryQuestionRepository.items[0]?.attachments).toEqual([
-      expect.objectContaining({ attachmentId: new UniqueId("1") }),
-      expect.objectContaining({ attachmentId: new UniqueId("2") }),
-    ]);
+    expect(
+      inMemoryQuestionRepository.items[0]?.attachments.getItems()
+    ).toHaveLength(2);
+    expect(inMemoryQuestionRepository.items[0]?.attachments.getItems()).toEqual(
+      [
+        expect.objectContaining({ attachmentId: new UniqueId("1") }),
+        expect.objectContaining({ attachmentId: new UniqueId("2") }),
+      ]
+    );
   });
 });
