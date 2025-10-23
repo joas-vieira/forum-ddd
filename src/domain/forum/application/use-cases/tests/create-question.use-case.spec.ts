@@ -14,6 +14,7 @@ describe("CreateQuestionUseCase", () => {
     inMemoryQuestionRepository = new InMemoryQuestionRepository(
       inMemoryQuestionAttachmentRepository
     );
+
     sut = new CreateQuestionUseCase(inMemoryQuestionRepository);
   });
 

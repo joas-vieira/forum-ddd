@@ -15,6 +15,7 @@ describe("GetQuestionBySlugUseCase", () => {
     inMemoryQuestionRepository = new InMemoryQuestionRepository(
       inMemoryQuestionAttachmentRepository
     );
+
     sut = new GetQuestionBySlugUseCase(inMemoryQuestionRepository);
   });
 

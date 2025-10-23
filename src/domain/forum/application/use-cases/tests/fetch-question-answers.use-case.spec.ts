@@ -1,14 +1,21 @@
 import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
 import { makeAnswerFactory } from "../../../../../../test/factories/make-answer.factory.js";
+import { InMemoryAnswerAttachmentRepository } from "../../../../../../test/repositories/in-memory-answer-attachment.repository.js";
 import { InMemoryAnswerRepository } from "../../../../../../test/repositories/in-memory-answer.repository.js";
 import { FetchQuestionAnswersUseCase } from "../fetch-question-answers.use-case.js";
 
+let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository;
 let inMemoryAnswerRepository: InMemoryAnswerRepository;
 let sut: FetchQuestionAnswersUseCase;
 
 describe("FetchQuestionAnswersUseCase", () => {
   beforeEach(() => {
-    inMemoryAnswerRepository = new InMemoryAnswerRepository();
+    inMemoryAnswerAttachmentRepository =
+      new InMemoryAnswerAttachmentRepository();
+    inMemoryAnswerRepository = new InMemoryAnswerRepository(
+      inMemoryAnswerAttachmentRepository
+    );
+
     sut = new FetchQuestionAnswersUseCase(inMemoryAnswerRepository);
   });
 

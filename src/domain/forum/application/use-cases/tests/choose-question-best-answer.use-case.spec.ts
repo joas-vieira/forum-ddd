@@ -6,9 +6,11 @@ import { InMemoryQuestionAttachmentRepository } from "../../../../../../test/rep
 import { InMemoryQuestionRepository } from "../../../../../../test/repositories/in-memory-question.repository.js";
 import { ChooseQuestionBestAnswerUseCase } from "../choose-question-best-answer.use-case.js";
 import { NotAllowedError } from "../errors/not-allowed.error.js";
+import { InMemoryAnswerAttachmentRepository } from "../../../../../../test/repositories/in-memory-answer-attachment.repository.js";
 
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository;
 let inMemoryQuestionRepository: InMemoryQuestionRepository;
+let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository;
 let inMemoryAnswerRepository: InMemoryAnswerRepository;
 let sut: ChooseQuestionBestAnswerUseCase;
 
@@ -19,7 +21,11 @@ describe("ChooseQuestionBestAnswerUseCase", () => {
     inMemoryQuestionRepository = new InMemoryQuestionRepository(
       inMemoryQuestionAttachmentRepository
     );
-    inMemoryAnswerRepository = new InMemoryAnswerRepository();
+    inMemoryAnswerAttachmentRepository =
+      new InMemoryAnswerAttachmentRepository();
+    inMemoryAnswerRepository = new InMemoryAnswerRepository(
+      inMemoryAnswerAttachmentRepository
+    );
 
     sut = new ChooseQuestionBestAnswerUseCase(
       inMemoryAnswerRepository,

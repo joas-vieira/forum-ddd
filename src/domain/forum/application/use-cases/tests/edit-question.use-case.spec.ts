@@ -6,8 +6,8 @@ import { InMemoryQuestionRepository } from "../../../../../../test/repositories/
 import { EditQuestionUseCase } from "../edit-question.use-case.js";
 import { NotAllowedError } from "../errors/not-allowed.error.js";
 
-let inMemoryQuestionRepository: InMemoryQuestionRepository;
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository;
+let inMemoryQuestionRepository: InMemoryQuestionRepository;
 let sut: EditQuestionUseCase;
 
 describe("EditQuestionUseCase", () => {

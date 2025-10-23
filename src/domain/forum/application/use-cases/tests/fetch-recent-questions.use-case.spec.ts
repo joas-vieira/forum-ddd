@@ -14,6 +14,7 @@ describe("FetchRecentQuestionsUseCase", () => {
     inMemoryQuestionRepository = new InMemoryQuestionRepository(
       inMemoryQuestionAttachmentRepository
     );
+
     sut = new FetchRecentQuestionsUseCase(inMemoryQuestionRepository);
   });
 

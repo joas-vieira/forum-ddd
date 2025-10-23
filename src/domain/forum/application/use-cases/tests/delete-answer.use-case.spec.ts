@@ -1,15 +1,23 @@
 import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
+import { makeAnswerAttachmentFactory } from "../../../../../../test/factories/make-answer-attachment.factory.js";
 import { makeAnswerFactory } from "../../../../../../test/factories/make-answer.factory.js";
+import { InMemoryAnswerAttachmentRepository } from "../../../../../../test/repositories/in-memory-answer-attachment.repository.js";
 import { InMemoryAnswerRepository } from "../../../../../../test/repositories/in-memory-answer.repository.js";
 import { DeleteAnswerUseCase } from "../delete-answer.use-case.js";
 import { NotAllowedError } from "../errors/not-allowed.error.js";
 
+let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository;
 let inMemoryAnswerRepository: InMemoryAnswerRepository;
 let sut: DeleteAnswerUseCase;
 
 describe("DeleteAnswerUseCase", () => {
   beforeEach(() => {
-    inMemoryAnswerRepository = new InMemoryAnswerRepository();
+    inMemoryAnswerAttachmentRepository =
+      new InMemoryAnswerAttachmentRepository();
+    inMemoryAnswerRepository = new InMemoryAnswerRepository(
+      inMemoryAnswerAttachmentRepository
+    );
+
     sut = new DeleteAnswerUseCase(inMemoryAnswerRepository);
   });
 
@@ -18,12 +26,24 @@ describe("DeleteAnswerUseCase", () => {
 
     await inMemoryAnswerRepository.create(newAnswer);
 
+    inMemoryAnswerAttachmentRepository.items.push(
+      makeAnswerAttachmentFactory({
+        answerId: newAnswer.id,
+        attachmentId: new UniqueId("1"),
+      }),
+      makeAnswerAttachmentFactory({
+        answerId: newAnswer.id,
+        attachmentId: new UniqueId("2"),
+      })
+    );
+
     await sut.execute({
       authorId: newAnswer.authorId.toString(),
       answerId: newAnswer.id.toString(),
     });
 
     expect(inMemoryAnswerRepository.items).toHaveLength(0);
+    expect(inMemoryAnswerAttachmentRepository.items).toHaveLength(0);
   });
 
   it("should not be able to delete a answer from another author", async () => {
