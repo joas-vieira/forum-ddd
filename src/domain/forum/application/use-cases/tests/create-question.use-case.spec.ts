@@ -1,13 +1,19 @@
 import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.js";
+import { InMemoryQuestionAttachmentRepository } from "../../../../../../test/repositories/in-memory-question-attachment.repository.js";
 import { InMemoryQuestionRepository } from "../../../../../../test/repositories/in-memory-question.repository.js";
 import { CreateQuestionUseCase } from "../create-question.use-case.js";
 
+let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository;
 let inMemoryQuestionRepository: InMemoryQuestionRepository;
 let sut: CreateQuestionUseCase;
 
 describe("CreateQuestionUseCase", () => {
   beforeEach(() => {
-    inMemoryQuestionRepository = new InMemoryQuestionRepository();
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentRepository();
+    inMemoryQuestionRepository = new InMemoryQuestionRepository(
+      inMemoryQuestionAttachmentRepository
+    );
     sut = new CreateQuestionUseCase(inMemoryQuestionRepository);
   });
 
