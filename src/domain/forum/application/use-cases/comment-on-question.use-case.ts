@@ -3,7 +3,7 @@ import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.j
 import { QuestionComment } from "../../enterprise/entities/question-comment.entity.js";
 import type { QuestionCommentRepository } from "../repositories/question-comment.repository.js";
 import type { QuestionRepository } from "../repositories/question.repository.js";
-import { ResourceNotFoundError } from "./errors/resource-not-found.error.js";
+import { ResourceNotFoundError } from "@/core/use-cases/errors/resource-not-found.error.js";
 
 interface CommentOnQuestionUseCaseRequest {
   questionId: string;

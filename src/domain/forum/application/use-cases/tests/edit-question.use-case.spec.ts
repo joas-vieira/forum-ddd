@@ -4,7 +4,7 @@ import { makeQuestionFactory } from "../../../../../../test/factories/make-quest
 import { InMemoryQuestionAttachmentRepository } from "../../../../../../test/repositories/in-memory-question-attachment.repository.js";
 import { InMemoryQuestionRepository } from "../../../../../../test/repositories/in-memory-question.repository.js";
 import { EditQuestionUseCase } from "../edit-question.use-case.js";
-import { NotAllowedError } from "../errors/not-allowed.error.js";
+import { NotAllowedError } from "@/core/use-cases/errors/not-allowed.error.js";
 
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository;
 let inMemoryQuestionRepository: InMemoryQuestionRepository;

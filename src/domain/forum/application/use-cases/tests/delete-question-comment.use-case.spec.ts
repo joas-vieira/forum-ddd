@@ -2,7 +2,7 @@ import { UniqueId } from "@/core/entities/value-objects/unique-id.value-object.j
 import { makeQuestionCommentFactory } from "../../../../../../test/factories/make-question-comment.factory.js";
 import { InMemoryQuestionCommentRepository } from "../../../../../../test/repositories/in-memory-question-comment.repository.js";
 import { DeleteQuestionCommentUseCase } from "../delete-question-comment.use-case.js";
-import { NotAllowedError } from "../errors/not-allowed.error.js";
+import { NotAllowedError } from "@/core/use-cases/errors/not-allowed.error.js";
 
 let inMemoryQuestionCommentRepository: InMemoryQuestionCommentRepository;
 let sut: DeleteQuestionCommentUseCase;

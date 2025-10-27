@@ -5,8 +5,8 @@ import { AnswerAttachment } from "../../enterprise/entities/answer-attachment.en
 import { Answer } from "../../enterprise/entities/answer.entity.js";
 import type { AnswerAttachmentRepository } from "../repositories/answer-attachment.repository.js";
 import type { AnswerRepository } from "../repositories/answer.repository.js";
-import { NotAllowedError } from "./errors/not-allowed.error.js";
-import { ResourceNotFoundError } from "./errors/resource-not-found.error.js";
+import { NotAllowedError } from "@/core/use-cases/errors/not-allowed.error.js";
+import { ResourceNotFoundError } from "@/core/use-cases/errors/resource-not-found.error.js";
 
 interface EditAnswerUseCaseRequest {
   authorId: string;

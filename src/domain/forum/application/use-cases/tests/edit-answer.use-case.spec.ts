@@ -3,7 +3,7 @@ import { makeAnswerFactory } from "../../../../../../test/factories/make-answer.
 import { InMemoryAnswerAttachmentRepository } from "../../../../../../test/repositories/in-memory-answer-attachment.repository.js";
 import { InMemoryAnswerRepository } from "../../../../../../test/repositories/in-memory-answer.repository.js";
 import { EditAnswerUseCase } from "../edit-answer.use-case.js";
-import { NotAllowedError } from "../errors/not-allowed.error.js";
+import { NotAllowedError } from "@/core/use-cases/errors/not-allowed.error.js";
 import { makeAnswerAttachmentFactory } from "../../../../../../test/factories/make-answer-attachment.factory.js";
 
 let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository;
