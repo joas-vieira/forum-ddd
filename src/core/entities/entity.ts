@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { UniqueId } from "./value-objects/unique-id.value-object.js";
 
 export abstract class Entity<Props> {
@@ -11,5 +13,17 @@ export abstract class Entity<Props> {
   protected constructor(props: Props, id?: UniqueId) {
     this._id = id ?? new UniqueId(id);
     this.props = props;
+  }
+
+  public equals(entity: Entity<any>) {
+    if (entity === this) {
+      return true;
+    }
+
+    if (entity.id === this._id) {
+      return true;
+    }
+
+    return false;
   }
 }
