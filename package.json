@@ -1,5 +1,5 @@
 {
-  "name": "forum-api",
+  "name": "forum-ddd",
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
